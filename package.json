@@ -1,0 +1,26 @@
+{
+  "name": "find-willa",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "tsc && node dist/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LeGaZViper/Find-Willa.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/LeGaZViper/Find-Willa/issues"
+  },
+  "homepage": "https://github.com/LeGaZViper/Find-Willa#readme",
+  "devDependencies": {
+    "typescript": "^4.8.4"
+  },
+  "dependencies": {
+    "zx": "^7.1.1"
+  }
+}
