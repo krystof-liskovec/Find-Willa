@@ -1,4 +1,4 @@
-import { appendToFile, createFile, createFolder, fileExists, getFileContent, isFolder, listDirectory } from "./utils";
+import { appendToFile, createFile, createFolder, fileExists, getFileContent, getFileCreationTime, isFolder, listDirectory } from "./utils";
 import nodepath from "path";
 
 const fileNames = [
@@ -9,61 +9,68 @@ const dirNames = [
     "var","log","tmp","bin","lib","lib64","lib32","libexec","include","share","src","build","dist","distro","distros","distrobuild","local","etc","config","configs","conf","cfg","cfgs","conf.d","config.d","configs.d","cache","backup","backups","media","music","pictures","photos","videos","docs","sys","system","sysroot","root","home","users","usr","mnt","run","opt","dev","proc","boot","snap","snapshots","srv","www","docker","dockerfiles","git","git-projects","asdf","games","vscode","vscode-extensions","extensions","settings","sbin","spool"
 ];
 
-function main() {
-    let path = process.argv[2];
-
-    if(!path) {
-        path = process.cwd();
-    } else {
-        path = nodepath.resolve(path);
-    }
-
-    if(!isFolder(path)) {
-        const correct = submitAnswer(path);
-        if(correct) {
-            console.log("Congratulations! You've found Willa! :)");
-        } else {
-            console.log("Sorry, that's not Willa. :(");
-        }
-
-        return process.exit(0);
-    };
-
-    initGame(path);
-}
-
-function submitAnswer(path: string) {
-    const willaConfigPath = nodepath.resolve(path).match(/.*\/find-willa/)?.[0];
-    const willaCurrentPath = getFileContent(`${willaConfigPath}/.willa-config`).split("\n")[2];
-    if(!willaCurrentPath) {
-        console.error("A game in progress was not found. :(");
-        return process.exit(1);
-    }
-
-    return willaCurrentPath === path ? true : false;
-}
-
-function initGame(path: string) {
-    const rootPath = `${path}/find-willa`;
-
-    if(fileExists(rootPath)) {
-        console.log("A game is already in progress. :(");
-        console.log("Delete the entire folder 'find-willa' and try again.");
-        return process.exit(1);
-    }
-
-    createFolder(rootPath);
-    createFile(rootPath, ".willa-config", `This file contains configuration for the current instance of the Find-Willa game.\nThis file is never Willa herself.`);
-
-    generateDummyFileStructure(rootPath);
-    const willaLocation = createWillaFile(rootPath);
-    appendToFile(`${rootPath}/.willa-config`, `\n${willaLocation}`);
-}
-
+const nameOfRootFolder = "find-willa";
+const nameOfConfigFile = ".willa-config";
 const complexityLevel = 1.3;
 const maxNestLevel = 5;
 const minimumFolders = 1;
 const minimumFilesPerFolder = 2;
+
+function main() {
+    let arg = process.argv[2];
+
+    if(arg === "--help" || arg === "-h") {
+        printHelp();
+        return process.exit(0);
+    }
+
+    if(!arg) arg = process.cwd();
+    else arg = nodepath.resolve(arg);
+
+    if(!isFolder(arg)) {
+        const [correct, startTime] = submitAnswer(arg);
+
+        if(correct) console.log(`Congratulations! You've found Willa! :)\nIt took you: ${(Date.now() - Number(startTime)) / 1000} sec.\n`);
+        else console.log("Sorry, that's not Willa. :(\nKeep looking!\n");
+
+        return process.exit(0);
+    }
+
+    initGame(arg);
+}
+
+function submitAnswer(path: string): [boolean, bigint] {
+    const willaConfigPath = nodepath.resolve(path).match(/.*\/find-willa/)?.[0];
+    const willaCurrentPath = getFileContent(`${willaConfigPath}/${nameOfConfigFile}`).split("\n")[2];
+    if(!willaCurrentPath) {
+        console.error("A game in progress was not found. :(\n");
+        return process.exit(1);
+    }
+
+    const creationTime = getFileCreationTime(`${willaConfigPath}/${nameOfConfigFile}`);
+
+    return willaCurrentPath === path ? [true, creationTime] : [false, creationTime];
+}
+
+function initGame(path: string) {
+    const rootPath = `${path}/${nameOfRootFolder}`;
+
+    if(fileExists(rootPath)) {
+        console.log("A game is already in progress. :(");
+        console.log(`Finish it, delete the entire folder '${nameOfRootFolder}' and try again.\n`);
+        return process.exit(1);
+    }
+
+    createFolder(rootPath);
+    createFile(rootPath, nameOfConfigFile, "This file contains configuration for the current instance of the Find-Willa game.\nThis file is never Willa herself.");
+
+    generateDummyFileStructure(rootPath);
+    const willaLocation = createWillaFile(rootPath);
+    appendToFile(`${rootPath}/${nameOfConfigFile}`, `\n${willaLocation}`);
+
+    console.log(`The game has started. Willa should be hiding somewhere in the '${nameOfRootFolder}' folder.\n`);
+}
+
 function generateDummyFileStructure(path: string, nestLevel = 0) {
     const dirPaths = [];
     for(let i = 0; i < Math.round(complexityLevel * Math.random() * 5) + minimumFolders; i++) {
@@ -107,6 +114,13 @@ function findRandomLocationInPath(path: string): string {
     randomFilePath = randomFilePath ? randomFilePath.split("/").slice(0, -1).join("/") : path;
     
     return randomFilePath;
+}
+
+function printHelp() {
+    console.log("You can call this script in the following ways (all paths can be relative):");
+    console.log("To start a new game:\n\t./find-willa [path]");
+    console.log("If no path is specified, the current working directory is used.\n");
+    console.log("To submit an answer:\n\t./find-willa [path-to-Willa]\n");
 }
 
 main();

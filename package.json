@@ -1,28 +1,34 @@
 {
-  "name": "find-willa",
-  "version": "1.0.0",
-  "type": "commonjs",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "build": "tsc",
-    "start": "tsc && node dist/index.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/LeGaZViper/Find-Willa.git"
-  },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/LeGaZViper/Find-Willa/issues"
-  },
-  "homepage": "https://github.com/LeGaZViper/Find-Willa#readme",
-  "devDependencies": {
-    "typescript": "^4.8.4"
-  },
-  "dependencies": {
-    "rimraf": "^3.0.2",
-    "zx": "^7.1.1"
-  }
+    "name": "find-willa",
+    "version": "1.0.0",
+    "description": "",
+    "bin": "dist/index.js",
+    "scripts": {
+        "build": "npm ddp && tsc && npx pkg -C GZip package.json",
+        "start": "tsc && node dist/index.js"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/LeGaZViper/Find-Willa.git"
+    },
+    "author": "Kryštof Lískovec",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/LeGaZViper/Find-Willa/issues"
+    },
+    "homepage": "https://github.com/LeGaZViper/Find-Willa#readme",
+    "devDependencies": {
+        "@types/node": "^18.11.15",
+        "typescript": "^4.8.4"
+    },
+    "dependencies": {
+        "pkg": "^5.8.0"
+    },
+    "pkg": {
+        "scripts": [
+            "dist/**/*"
+        ],
+        "targets": ["node18-linux-x64"],
+        "outputPath": "build"
+    }
 }

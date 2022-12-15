@@ -53,3 +53,8 @@ export function listDirectory(path: string) {
         .filter((file) => !file.startsWith("."))
         .map((file) => `${path}/${file}`);
 }
+
+export function getFileCreationTime(path: string) {
+    const stats = fs.statSync(path, { bigint: true });
+    return stats.birthtimeMs;
+}
