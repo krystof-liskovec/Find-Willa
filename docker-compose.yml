@@ -1,0 +1,13 @@
+services:
+    node:
+      image: node:18
+      volumes:
+          - ./:/app
+          - node-18:/home/node/.npm
+      working_dir: /app
+      user: node
+      tty: true
+
+volumes:
+    node-18:
+        external: true

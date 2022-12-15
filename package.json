@@ -1,10 +1,11 @@
 {
   "name": "find-willa",
   "version": "1.0.0",
-  "type": "module",
+  "type": "commonjs",
   "description": "",
   "main": "index.js",
   "scripts": {
+    "build": "tsc",
     "start": "tsc && node dist/index.js"
   },
   "repository": {
@@ -21,6 +22,7 @@
     "typescript": "^4.8.4"
   },
   "dependencies": {
+    "rimraf": "^3.0.2",
     "zx": "^7.1.1"
   }
 }
