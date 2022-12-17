@@ -4,7 +4,7 @@
     "description": "",
     "bin": "dist/index.js",
     "scripts": {
-        "build": "npm ddp && tsc && npx pkg -C GZip package.json",
+        "build": "npm ddp && tsc && pkg -C GZip package.json",
         "start": "tsc && node dist/index.js"
     },
     "repository": {
@@ -27,6 +27,9 @@
     "pkg": {
         "scripts": [
             "dist/**/*"
+        ],
+        "assets": [
+            "assets/**/*"
         ],
         "targets": ["node18-linux-x64"],
         "outputPath": "build"

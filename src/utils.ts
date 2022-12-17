@@ -47,14 +47,27 @@ export function appendToFile(path: string, content: string) {
     fs.appendFileSync(path, content);
 }
 
-export function listDirectory(path: string) {
+export function listFilesInDirectory(path: string) {
     return fs
         .readdirSync(path)
-        .filter((file) => !file.startsWith("."))
         .map((file) => `${path}/${file}`);
 }
 
 export function getFileCreationTime(path: string) {
     const stats = fs.statSync(path, { bigint: true });
     return stats.birthtimeMs;
+}
+
+export function parseParameter(args: string[], parameterKeys: string[]): string | null {
+    const paramIndex = args.findIndex((key) => parameterKeys.includes(key));
+    if(paramIndex !== -1) {
+        if(!args[paramIndex + 1] || !args[paramIndex + 1].match(/-+\D+/)) return args[paramIndex];
+        return args[paramIndex + 1];
+    }
+
+    return null;
+}
+
+export function generateRandomFileName() {
+    return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
 }
