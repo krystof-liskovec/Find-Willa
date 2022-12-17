@@ -111,7 +111,7 @@ function createWillaFile(rootPath: string) {
     const willaLocation = findRandomLocationInPath(rootPath);
     let willaName = "Willa";
     let willaContent = "";
-    let willaPermissions = 0o644;
+    let willaPermissions = undefined;
 
     if(hidingStrategy === 1) {
         willaName = willaName.split("").reverse().join("");
