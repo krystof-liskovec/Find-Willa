@@ -43,14 +43,17 @@ export function createFile(path: string, name?: string, content?: string, permis
     return path;
 }
 
-export function appendToFile(path: string, content: string) {
-    fs.appendFileSync(path, content);
-}
-
 export function listFilesInDirectory(path: string) {
     return fs
         .readdirSync(path)
         .map((file) => `${path}/${file}`);
+}
+
+export function listDirectoriesInDirectory(path: string) {
+    return fs
+        .readdirSync(path)
+        .map((file) => `${path}/${file}`)
+        .filter((file) => isFolder(file));
 }
 
 export function getFileCreationTime(path: string) {
@@ -59,9 +62,9 @@ export function getFileCreationTime(path: string) {
 }
 
 export function parseParameter(args: string[], parameterKeys: string[]): string | null {
-    const paramIndex = args.findIndex((key) => parameterKeys.includes(key));
+    const paramIndex = args.findIndex(key => parameterKeys.includes(key));
     if(paramIndex !== -1) {
-        if(!args[paramIndex + 1] || !args[paramIndex + 1].match(/-+\D+/)) return args[paramIndex];
+        if(!args[paramIndex + 1] || args[paramIndex + 1].match(/^-+\D+/)) return args[paramIndex];
         return args[paramIndex + 1];
     }
 
