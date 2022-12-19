@@ -5,13 +5,20 @@ export function fileExists(path: string) {
 }
 
 export function isFolder(path: string) {
-    const stats = fs.statSync(path);
-    return stats.isDirectory();
+    try {
+        const stats = fs.statSync(path);
+        return stats.isDirectory();
+    }
+    catch(err) {
+        return false;
+    }
 }
 
 export function isEmptyFolder(path: string) {
-    const files = fs.readdirSync(path);
-    if (files.length === 0) return true;
+    try {
+        const files = fs.readdirSync(path);
+        if (files.length === 0) return true;
+    } catch(err) {}
     return false;
 }
 
@@ -64,7 +71,10 @@ export function getFileCreationTime(path: string) {
 export function parseArgument(args: string[], parameterKeys: string[]): string | null {
     const paramIndex = args.findIndex(key => parameterKeys.includes(key));
     if(paramIndex !== -1) {
-        if(!args[paramIndex + 1] || args[paramIndex + 1].match(/^-+\D+/)) return args[paramIndex];
+        if(!args[paramIndex + 1] || args[paramIndex + 1].match(/^-+\D+/)){
+            return args[paramIndex];
+        }
+
         return args[paramIndex + 1];
     }
 

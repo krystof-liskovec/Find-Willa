@@ -1,4 +1,4 @@
-import { createFile, createFolder, fileExists, generateRandomFileName, getFileContent, getFileCreationTime, isFolder, listDirectoriesInDirectory, listFilesInDirectory, parseArgument, setFilePermissions } from "./utils";
+import { createFile, createFolder, fileExists, generateRandomFileName, getFileContent, getFileCreationTime, isFolder, listDirectoriesInDirectory, parseArgument } from "./utils";
 import nodepath from "path";
 
 const nameOfRootFolder = "find-willa";
@@ -36,7 +36,13 @@ function main() {
     if(Number.isNaN(hidingStrategy)) hidingStrategy = Math.floor(Math.random() * numberOfStrategies);
 
     let startPath = process.cwd();
-    if(args.reverse()[0] && !args.reverse()[0].match(/^-+\D+/)) startPath = nodepath.resolve(args.reverse()[0]);
+
+    args.reverse();
+    if(args[0] && !args[0].match(/^-+\D+/)){ 
+        const path = nodepath.resolve(args[0]);
+        if(isFolder(path)) startPath = path;
+    }
+    args.reverse();
 
     // check if starting a new game or submitting an answer
     // check is done based on provided path
@@ -88,7 +94,6 @@ function initGame(path: string) {
     generateDummyFileStructure(rootPath);
     const willaLocation = createWillaFile(rootPath);
     createFile(rootPath, nameOfConfigFile, `This file contains configuration for the current instance of the Find-Willa game.\nThis file is never Willa herself.\n${willaLocation}`);
-    //appendToFile(`${rootPath}/${nameOfConfigFile}`, `\n${willaLocation}`);
 
     console.log(`The game has started. Willa should be hiding somewhere in the '${nameOfRootFolder}' folder.\n`);
 }
@@ -141,11 +146,11 @@ function createWillaFile(rootPath: string) {
     } else if (hidingStrategy === 2) {
         willaName = fileNames[Math.floor(Math.random() * fileNames.length)];
         if(!willaName) willaName = generateRandomFileName();
-        else willaContent = "Hi, it's me, Willa :)";
+        willaContent = "Hi, it's me, Willa :)";
     } else {
         willaName = fileNames[Math.floor(Math.random() * fileNames.length)];
         if(!willaName) willaName = generateRandomFileName();
-        else willaPermissions = 0o020;
+        willaPermissions = 0o020;
     }
 
     createFile(willaLocation, willaName, willaContent, willaPermissions);
