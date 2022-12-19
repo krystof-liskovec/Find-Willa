@@ -1,4 +1,4 @@
-import { createFile, createFolder, fileExists, generateRandomFileName, getFileContent, getFileCreationTime, isFolder, listDirectoriesInDirectory, listFilesInDirectory, parseParameter, setFilePermissions } from "./utils";
+import { createFile, createFolder, fileExists, generateRandomFileName, getFileContent, getFileCreationTime, isFolder, listDirectoriesInDirectory, listFilesInDirectory, parseArgument, setFilePermissions } from "./utils";
 import nodepath from "path";
 
 const nameOfRootFolder = "find-willa";
@@ -23,16 +23,16 @@ function main() {
     let args = process.argv.slice(2);
 
     // resolve arguments
-    if(parseParameter(args, ["--help", "-h"])) {
+    if(parseArgument(args, ["--help", "-h"])) {
         printHelp();
         return process.exit(0);
     }
 
-    complexityLevel = Number(parseParameter(args, ["--complexity-level", "-c"]) || complexityLevel);
-    maxNestLevel = Number(parseParameter(args, ["--max-nest-level", "-n"]) || maxNestLevel);
-    minimumFolders = Number(parseParameter(args, ["--minimum-folders", "-f"]) || minimumFolders);
-    minimumFilesPerFolder = Number(parseParameter(args, ["--minimum-files-per-folder", "-m"]) || minimumFilesPerFolder);
-    hidingStrategy = Number(parseParameter(args, ["--strategy", "-s"]) || hidingStrategy);
+    complexityLevel = Number(parseArgument(args, ["--complexity-level", "-c"]) || complexityLevel);
+    maxNestLevel = Number(parseArgument(args, ["--max-nest-level", "-n"]) || maxNestLevel);
+    minimumFolders = Number(parseArgument(args, ["--minimum-folders", "-f"]) || minimumFolders);
+    minimumFilesPerFolder = Number(parseArgument(args, ["--minimum-files-per-folder", "-m"]) || minimumFilesPerFolder);
+    hidingStrategy = Number(parseArgument(args, ["--strategy", "-s"]) || hidingStrategy);
     if(Number.isNaN(hidingStrategy)) hidingStrategy = Math.floor(Math.random() * numberOfStrategies);
 
     let startPath = process.cwd();

@@ -61,7 +61,7 @@ export function getFileCreationTime(path: string) {
     return stats.birthtimeMs;
 }
 
-export function parseParameter(args: string[], parameterKeys: string[]): string | null {
+export function parseArgument(args: string[], parameterKeys: string[]): string | null {
     const paramIndex = args.findIndex(key => parameterKeys.includes(key));
     if(paramIndex !== -1) {
         if(!args[paramIndex + 1] || args[paramIndex + 1].match(/^-+\D+/)) return args[paramIndex];
