@@ -1,7 +1,7 @@
 import { createFile, createFolder, fileExists, generateRandomFileName, getFileContent, getFileCreationTime, isFolder, listDirectoriesInDirectory, parseArgument } from "./utils";
 import nodepath from "path";
 
-const nameOfRootFolder = "find-willa";
+const nameOfRootFolder = "find-willa-game";
 const nameOfConfigFile = ".willa-config";
 const dirNames = getFileContent(nodepath.join(__dirname, "..", "assets/dir-names.txt")).split("\n");
 const fileNames = getFileContent(nodepath.join(__dirname, "..", "assets/file-names.txt")).split("\n");
