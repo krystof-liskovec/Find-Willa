@@ -147,7 +147,7 @@ function createWillaFile(rootPath: string) {
         willaName = fileNames[Math.floor(Math.random() * fileNames.length)];
         if(!willaName) willaName = generateRandomFileName();
         willaContent = "Hi, it's me, Willa :)";
-    } else {
+    } else if (hidingStrategy === 3) {
         willaName = fileNames[Math.floor(Math.random() * fileNames.length)];
         if(!willaName) willaName = generateRandomFileName();
         willaPermissions = 0o020;
